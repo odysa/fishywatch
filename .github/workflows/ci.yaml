@@ -36,3 +36,6 @@ jobs:
 
       - name: Install project
         run: poetry install --no-interaction
+
+      - name: Lint
+        run: ruff .

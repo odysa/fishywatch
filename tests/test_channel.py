@@ -4,6 +4,7 @@ import random
 import pytest
 from infra.channel import Channel, Receiver, Sender
 
+
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
     "msg", ["hello", "!%$#@%#$%$#", "1232143", 123123, [1231241231]]

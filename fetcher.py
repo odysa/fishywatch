@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 
-import requests
 from bs4 import BeautifulSoup
 
 from infra.channel import Receiver, Sender
 from infra.types import PageMsg
+import requests
 
 
 class Fetcher(ABC):
@@ -21,15 +21,22 @@ class RequestsFetcher(Fetcher):
         self.limit = limit
         self.timeout = timeout
 
-    def fetch(self, url: str) -> BeautifulSoup:
+    def fetch(self, url: str) -> bytes:
         resp = requests.get(url, timeout=self.timeout)
         return resp.content
 
 
 async def fetcher_worker(
-    fetcher: Fetcher, url_rx: Receiver[str], soup_tx: Sender[PageMsg]
+        fetcher: Fetcher, url_rx: Receiver[str], soup_tx: Sender[PageMsg]
 ) -> None:
+    """
+    Args:
+        fetcher: web page fetcher
+        url_rx: url receiver
+        soup_tx: parsed beautifulsoup sender
+
+    Returns: None
+    """
     while url := await url_rx.recv():
         page = fetcher.fetch(url)
-        soup = BeautifulSoup(page.content)
-        await soup_tx.send({"soup": soup, "parse_func": None})
+        _soup = BeautifulSoup(page.content)

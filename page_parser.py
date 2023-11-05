@@ -1,16 +1,20 @@
 from abc import ABC, abstractmethod
 
-from bs4 import BeautifulSoup
-from traitlets import Callable
-
 from infra.channel import Receiver
+from infra.exception import ParseFuncNotFound
 from infra.types import PageMsg, PageRes, ParseFunc
+from bs4 import BeautifulSoup
 
 
 class Parser(ABC):
     @abstractmethod
     def parse(self, page_msg: PageMsg) -> PageRes | None:
         pass
+
+
+def get_urls(soup: BeautifulSoup) -> list[str]:
+    links = soup.find_all("a")
+    return [link.get("href") for link in links]
 
 
 class FishyParse(Parser):
@@ -23,15 +27,18 @@ class FishyParse(Parser):
         soup = page_msg["soup"]
         domain = page_msg["domain"]
         func = self.parser_func_map[domain]
+
         if not func:
-            return None
-        soup.find_all("a")
-        return {"data": [], "urls": []}
+            raise ParseFuncNotFound
 
-
-PARSER_FUNC_MAP: dict[str, Callable[[BeautifulSoup]]] = {"petre": None}
+        urls = get_urls(soup)
+        return {"data": [], "urls": urls}
 
 
 async def parser_worker(parser: Parser, page_rx: Receiver[PageMsg]):
     while page_msg := await page_rx.recv():
-        res = parser.parse(page_msg)
+        try:
+            res: PageRes = parser.parse(page_msg)
+            _urls = res.get("urls")
+        except ParseFuncNotFound:
+            pass

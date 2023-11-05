@@ -105,4 +105,4 @@ class Channel(Generic[_T]):
             tuple: A tuple containing a Sender instance and a Receiver instance.
         """
         q = Queue[_T](max_size)
-        return (Sender(q), Receiver(q))
+        return Sender(q), Receiver(q)

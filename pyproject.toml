@@ -6,11 +6,11 @@ authors = ["odysa <piensengxv@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.11"
 beautifulsoup4 = "^4.12.2"
-requests = "^2.31.0"
 tldextract = "^5.0.1"
 lxml = "^4.9.3"
+aiohttp = "^3.8.6"
 
 
 [tool.poetry.group.dev.dependencies]

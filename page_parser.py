@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 from infra.channel import Receiver, Sender
 from infra.exception import ParseFuncNotFound
 from infra.types import PageMsg, PageResult, ParsedData, ParseFunc
+from utils import filter_urls
 
 
 class Parser(ABC):
@@ -35,7 +36,7 @@ class FishyParser(Parser):
         func: ParseFunc = self.parser_func_map[domain]
         parsed_result: ParsedData = func(soup)
 
-        urls = get_urls(soup)
+        urls = filter_urls(domain, get_urls(soup))
         return {"data": parsed_result, "urls": urls}
 
 

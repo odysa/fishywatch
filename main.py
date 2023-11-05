@@ -1,16 +1,20 @@
 import asyncio as tokio
 
 from fetcher import RequestsFetcher, fetcher_worker
-from infra.channel import channel
+from infra.channel import Receiver, Sender, channel
+from infra.types import PageMsg, PageResult
 from page_parser import FishyParser, parser_worker
+from parserfuncs import parse_peche
 
 
-async def start_fetcher_and_parser():
-    url_tx, url_rx = channel()
-    page_tx, page_rx = channel()
-    parsed_res_tx, parsed_res_rx = channel()
-
-    fetcher_task = tokio.create_task(
+def start_fetcher_and_parser(
+        tg: tokio.TaskGroup,
+        url_rx: Receiver[str],
+        page_tx: Sender[PageMsg],
+        page_rx: Receiver[PageMsg],
+        parsed_res_tx: Sender[PageResult]
+):
+    fetcher_task = tg.create_task(
         fetcher_worker(
             RequestsFetcher(),
             url_rx,
@@ -18,33 +22,47 @@ async def start_fetcher_and_parser():
         )
     )
 
-    parser_task = tokio.create_task(
+    parser_task = tg.create_task(
         parser_worker(
-            FishyParser(dict()),
+            FishyParser({"pechextreme": parse_peche}),
             page_rx,
             parsed_res_tx
         )
     )
 
-    return fetcher_task, parser_task, url_tx, parsed_res_rx
+    return fetcher_task, parser_task
 
 
 async def main():
-    # urls = ["https://www.baidu.com"]
-    fetcher_tasks = []
-    parser_tasks = []
-    url_txs = []
+    visited = set()
+    urls = ["https://www.pechextreme.com/en"]
 
-    for _ in range(10):
-        fetcher_task, parser_task, url_tx, parsed_res_rx = start_fetcher_and_parser()
-        url_txs.append(url_tx)
-        fetcher_tasks.append(fetcher_task)
-        parser_tasks.append(parser_task)
+    url_tx, url_rx = channel()
+    page_tx, page_rx = channel()
+    parsed_res_tx, parsed_res_rx = channel()
 
-    for t in fetcher_tasks:
-        await t
-    for t in parser_tasks:
-        await t
+    async with tokio.TaskGroup() as tg:
+        for _ in range(100):
+            start_fetcher_and_parser(
+                tg,
+                url_rx,
+                page_tx,
+                page_rx,
+                parsed_res_tx
+            )
+
+        for url in urls:
+            visited.add(url)
+            await url_tx.send(url)
+
+        while parsed_res := await parsed_res_rx.recv():
+            res: PageResult = parsed_res
+            for url in res.get("urls"):
+                if url not in visited:
+                    await url_tx.send(url)
+                    visited.add(url)
+            if res["data"]:
+                print(res["data"])
 
 
 if __name__ == "__main__":

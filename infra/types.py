@@ -1,4 +1,4 @@
-from typing import Callable, TypedDict
+from typing import Callable, TypeAlias, TypedDict
 
 from bs4 import BeautifulSoup
 
@@ -20,4 +20,4 @@ class PageResult(TypedDict):
     data: ParsedData
 
 
-type ParseFunc = Callable[[BeautifulSoup], ParsedData]
+ParseFunc: TypeAlias = Callable[[BeautifulSoup], ParsedData]

@@ -5,19 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ebcf93f4-d073-49b6-b85c-f1e605628691" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/fishywatch.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/infra/exception.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/infra/channel.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/infra/conftest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fetcher.py" beforeDir="false" afterPath="$PROJECT_DIR$/fetcher.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/infra/channel.py" beforeDir="false" afterPath="$PROJECT_DIR$/infra/channel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/page_parser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/poetry.lock" beforeDir="false" afterPath="$PROJECT_DIR$/poetry.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/ci.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/ci.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -144,7 +133,7 @@
       <updated>1699147339592</updated>
       <workItem from="1699147340784" duration="386000" />
       <workItem from="1699147729617" duration="254000" />
-      <workItem from="1699147991368" duration="3066000" />
+      <workItem from="1699147991368" duration="3198000" />
     </task>
     <servers />
   </component>

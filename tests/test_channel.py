@@ -2,6 +2,7 @@ import asyncio
 import random
 
 import pytest
+
 from infra.channel import Channel, Receiver, Sender
 
 

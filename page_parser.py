@@ -1,10 +1,11 @@
+import logging
 from abc import ABC, abstractmethod
+
+from bs4 import BeautifulSoup
 
 from infra.channel import Receiver, Sender
 from infra.exception import ParseFuncNotFound
-from infra.types import PageMsg, PageRes, ParseFunc, ParsedResult
-from bs4 import BeautifulSoup
-import logging
+from infra.types import PageMsg, PageRes, ParsedResult, ParseFunc
 
 
 class Parser(ABC):

@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 
+import requests
+import tldextract
 from bs4 import BeautifulSoup
 
 from infra.channel import Receiver, Sender
 from infra.types import PageMsg
-import requests
-import tldextract
 
 
 class Fetcher(ABC):

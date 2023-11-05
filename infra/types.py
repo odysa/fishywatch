@@ -1,7 +1,6 @@
-from typing import Generic, TypeAlias, TypedDict, TypeVar
+from typing import Callable, TypedDict
 
 from bs4 import BeautifulSoup
-from typing import Callable
 
 
 class PageMsg(TypedDict):

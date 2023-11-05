@@ -22,5 +22,5 @@ pytest-sugar = "^0.9.7"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[pytest]
-asyncio_mode = "auto"
+[tool.ruff]
+extend-select = ["I"]

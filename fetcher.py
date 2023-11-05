@@ -5,12 +5,13 @@ from bs4 import BeautifulSoup
 from infra.channel import Receiver, Sender
 from infra.types import PageMsg
 import requests
+import tldextract
 
 
 class Fetcher(ABC):
     @abstractmethod
     def fetch(self, url: str) -> BeautifulSoup:
-        pass
+        ...
 
 
 class RequestsFetcher(Fetcher):
@@ -27,7 +28,7 @@ class RequestsFetcher(Fetcher):
 
 
 async def fetcher_worker(
-        fetcher: Fetcher, url_rx: Receiver[str], soup_tx: Sender[PageMsg]
+    fetcher: Fetcher, url_rx: Receiver[str], soup_tx: Sender[PageMsg]
 ) -> None:
     """
     Args:
@@ -39,4 +40,7 @@ async def fetcher_worker(
     """
     while url := await url_rx.recv():
         page = fetcher.fetch(url)
-        _soup = BeautifulSoup(page.content)
+        soup = BeautifulSoup(page.content)
+        domain = tldextract.extract(url).domain
+        msg = PageMsg(domain=domain, soup=soup)
+        await soup_tx.send(msg)

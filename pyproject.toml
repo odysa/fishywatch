@@ -8,8 +8,8 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 beautifulsoup4 = "^4.12.2"
-traitlets = "^5.13.0"
 requests = "^2.31.0"
+tldextract = "^5.0.1"
 
 
 [tool.poetry.group.dev.dependencies]

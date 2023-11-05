@@ -1,14 +1,7 @@
 from typing import Generic, TypeAlias, TypedDict, TypeVar
 
 from bs4 import BeautifulSoup
-from traitlets import Callable
-
-_T = TypeVar("_T")
-
-
-class PageRes(TypedDict, Generic[_T]):
-    urls: list[str]
-    data: _T
+from typing import Callable
 
 
 class PageMsg(TypedDict):
@@ -16,4 +9,16 @@ class PageMsg(TypedDict):
     domain: str
 
 
-ParseFunc: TypeAlias = Callable[[BeautifulSoup]]
+class ParsedResult(TypedDict):
+    price: float
+    currency: str
+    name: str
+    description: str
+
+
+class PageRes(TypedDict):
+    urls: list[str]
+    data: ParsedResult
+
+
+type ParseFunc = Callable[[BeautifulSoup], ParsedResult]

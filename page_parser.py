@@ -1,15 +1,16 @@
 from abc import ABC, abstractmethod
 
-from infra.channel import Receiver
+from infra.channel import Receiver, Sender
 from infra.exception import ParseFuncNotFound
-from infra.types import PageMsg, PageRes, ParseFunc
+from infra.types import PageMsg, PageRes, ParseFunc, ParsedResult
 from bs4 import BeautifulSoup
+import logging
 
 
 class Parser(ABC):
     @abstractmethod
     def parse(self, page_msg: PageMsg) -> PageRes | None:
-        pass
+        ...
 
 
 def get_urls(soup: BeautifulSoup) -> list[str]:
@@ -26,19 +27,32 @@ class FishyParse(Parser):
     def parse(self, page_msg: PageMsg) -> PageRes:
         soup = page_msg["soup"]
         domain = page_msg["domain"]
-        func = self.parser_func_map[domain]
 
-        if not func:
-            raise ParseFuncNotFound
+        if domain not in self.parser_func_map:
+            raise ParseFuncNotFound(f"{domain} does not have a parse function")
+
+        func: ParseFunc = self.parser_func_map[domain]
+        parsed_result: ParsedResult = func(soup)
 
         urls = get_urls(soup)
-        return {"data": [], "urls": urls}
+        return {"data": parsed_result, "urls": urls}
 
 
-async def parser_worker(parser: Parser, page_rx: Receiver[PageMsg]):
+async def parser_worker(
+    parser: Parser,
+    page_rx: Receiver[PageMsg],
+    data_tx: Sender[ParsedResult],
+    url_tx: Sender[str],
+):
     while page_msg := await page_rx.recv():
         try:
             res: PageRes = parser.parse(page_msg)
-            _urls = res.get("urls")
-        except ParseFuncNotFound:
-            pass
+            data = res["data"]
+            urls = res["urls"]
+
+            await data_tx.send(data)
+            for url in urls:
+                await url_tx.send(url)
+
+        except ParseFuncNotFound as e:
+            logging.exception(str(e))

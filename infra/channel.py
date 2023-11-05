@@ -78,6 +78,6 @@ class Receiver(Generic[_T]):
         return await self.q.get()
 
 
-def channel[_T](max_size: int = 0) -> (Sender[_T], Receiver[_T]):
+def channel(max_size: int = 0) -> (Sender[_T], Receiver[_T]):
     q = Queue[_T](max_size)
-    return Sender(q), Receiver(q)
+    return Sender[_T](q), Receiver[_T](q)

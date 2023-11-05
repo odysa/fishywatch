@@ -8,16 +8,16 @@ class PageMsg(TypedDict):
     domain: str
 
 
-class ParsedResult(TypedDict):
+class ParsedData(TypedDict):
     price: float
     currency: str
     name: str
     description: str
 
 
-class PageRes(TypedDict):
+class PageResult(TypedDict):
     urls: list[str]
-    data: ParsedResult
+    data: ParsedData
 
 
-type ParseFunc = Callable[[BeautifulSoup], ParsedResult]
+type ParseFunc = Callable[[BeautifulSoup], ParsedData]

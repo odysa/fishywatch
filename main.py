@@ -5,13 +5,10 @@ from infra.channel import channel
 from page_parser import FishyParser, parser_worker
 
 
-async def main():
-    urls = ["https://www.baidu.com"]
-
+async def start_fetcher_and_parser():
     url_tx, url_rx = channel()
     page_tx, page_rx = channel()
     parsed_res_tx, parsed_res_rx = channel()
-    parsed_url_tx, parsed_url_rx = channel()
 
     fetcher_task = tokio.create_task(
         fetcher_worker(
@@ -22,17 +19,32 @@ async def main():
     )
 
     parser_task = tokio.create_task(
-        parser_worker(FishyParser(dict()), page_rx, parsed_res_tx, parsed_url_tx)
+        parser_worker(
+            FishyParser(dict()),
+            page_rx,
+            parsed_res_tx
+        )
     )
 
-    for url in urls:
-        await url_tx.send(url)
+    return fetcher_task, parser_task, url_tx, parsed_res_rx
 
-    while url := await parsed_url_rx.recv():
-        await url_tx.send(url)
 
-    await fetcher_task
-    await parser_task
+async def main():
+    # urls = ["https://www.baidu.com"]
+    fetcher_tasks = []
+    parser_tasks = []
+    url_txs = []
+
+    for _ in range(10):
+        fetcher_task, parser_task, url_tx, parsed_res_rx = start_fetcher_and_parser()
+        url_txs.append(url_tx)
+        fetcher_tasks.append(fetcher_task)
+        parser_tasks.append(parser_task)
+
+    for t in fetcher_tasks:
+        await t
+    for t in parser_tasks:
+        await t
 
 
 if __name__ == "__main__":

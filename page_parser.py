@@ -19,7 +19,7 @@ def get_urls(soup: BeautifulSoup) -> list[str]:
     return [link.get("href") for link in links]
 
 
-class FishyParse(Parser):
+class FishyParser(Parser):
     parser_func_map: dict[str, ParseFunc]
 
     def __init__(self, parser_func_map: dict[str, ParseFunc]) -> None:

@@ -3,7 +3,7 @@ import random
 
 import pytest
 
-from infra.channel import Channel, Receiver, Sender
+from infra.channel import Receiver, Sender, channel
 
 
 @pytest.mark.asyncio
@@ -11,7 +11,7 @@ from infra.channel import Channel, Receiver, Sender
     "msg", ["hello", "!%$#@%#$%$#", "1232143", 123123, [1231241231]]
 )
 async def test_channel(msg: int | str | list):
-    tx, rx = Channel.new()
+    tx, rx = channel()
     await tx.send(msg)
 
     assert await rx.recv() == msg
@@ -30,7 +30,7 @@ async def test_concurrent_channel(n: int):
         for i in range(n):
             await tx.send(data[i])
 
-    t_tx, t_rx = Channel[int].new()
+    t_tx, t_rx = channel()
     rx_handle = asyncio.create_task(receiver(t_rx))
     tx_handle = asyncio.create_task(sender(t_tx))
     await rx_handle

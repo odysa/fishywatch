@@ -28,13 +28,13 @@ class RequestsFetcher(Fetcher):
 
 
 async def fetcher_worker(
-    fetcher: Fetcher, url_rx: Receiver[str], soup_tx: Sender[PageMsg]
+    fetcher: Fetcher, url_rx: Receiver[str], page_tx: Sender[PageMsg]
 ) -> None:
     """
     Args:
         fetcher: web page fetcher
         url_rx: url receiver
-        soup_tx: parsed beautifulsoup sender
+        page_tx: parsed beautifulsoup sender
 
     Returns: None
     """
@@ -43,4 +43,4 @@ async def fetcher_worker(
         soup = BeautifulSoup(page.content)
         domain = tldextract.extract(url).domain
         msg = PageMsg(domain=domain, soup=soup)
-        await soup_tx.send(msg)
+        await page_tx.send(msg)

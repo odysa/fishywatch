@@ -78,31 +78,6 @@ class Receiver(Generic[_T]):
         return await self.q.get()
 
 
-class Channel(Generic[_T]):
-    """
-    A generic class representing a channel for communication between sender and receiver.
-
-    Methods:
-        new(cls, max_size: int = 0) -> (Sender[_T], Receiver[_T]):
-            Creates a new channel with the specified maximum size.
-
-        Args:
-            max_size (int): The maximum size of the channel queue. Defaults to 0 (unbounded).
-
-        Returns:
-            tuple: A tuple containing a Sender instance and a Receiver instance.
-    """
-
-    @classmethod
-    def new(cls, max_size: int = 0) -> (Sender[_T], Receiver[_T]):
-        """
-        Creates a new channel with the specified maximum size.
-
-        Args:
-            max_size (int): The maximum size of the channel queue. Defaults to 0 (unbounded).
-
-        Returns:
-            tuple: A tuple containing a Sender instance and a Receiver instance.
-        """
-        q = Queue[_T](max_size)
-        return (Sender(q), Receiver(q))
+def channel(max_size: int = 0) -> (Sender[_T], Receiver[_T]):
+    q = Queue[_T](max_size)
+    return Sender[_T](q), Receiver[_T](q)

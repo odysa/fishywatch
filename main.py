@@ -6,7 +6,7 @@ from page_parser import FishyParser, parser_worker
 
 
 async def main():
-    urls = []
+    urls = ["https://www.baidu.com"]
 
     url_tx, url_rx = channel()
     page_tx, page_rx = channel()

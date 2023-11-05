@@ -40,10 +40,10 @@ class FishyParser(Parser):
 
 
 async def parser_worker(
-    parser: Parser,
-    page_rx: Receiver[PageMsg],
-    data_tx: Sender[ParsedResult],
-    url_tx: Sender[str],
+        parser: Parser,
+        page_rx: Receiver[PageMsg],
+        data_tx: Sender[ParsedResult],
+        url_tx: Sender[str],
 ):
     while page_msg := await page_rx.recv():
         try:
@@ -56,4 +56,4 @@ async def parser_worker(
                 await url_tx.send(url)
 
         except ParseFuncNotFound as e:
-            logging.exception(str(e))
+            logging.error(str(e))

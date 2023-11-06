@@ -2,11 +2,11 @@ import logging
 from abc import ABC, abstractmethod
 
 from bs4 import BeautifulSoup
+from utils import filter_urls
 
 from infra.channel import Receiver, Sender
 from infra.exception import ParseFuncNotFound
 from infra.types import PageMsg, PageResult, ParsedData, ParseFunc
-from utils import filter_urls
 
 
 class Parser(ABC):
@@ -53,5 +53,5 @@ async def parser_worker(
 
             msg = PageResult(data=data, urls=urls)
             await data_tx.send(msg)
-        except ParseFuncNotFound as e:
+        except Exception as e:
             logging.error(str(e))

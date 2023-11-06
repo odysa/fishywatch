@@ -36,7 +36,6 @@ async def fetcher_worker(
 ) -> None:
     """
     Args:
-        no: id
         fetcher: web page fetcher
         url_rx: url receiver
         page_tx: parsed beautifulsoup sender

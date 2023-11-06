@@ -1,10 +1,10 @@
 import asyncio as tokio
 
-from fetcher import RequestsFetcher, fetcher_worker
 from infra.channel import Receiver, Sender, channel
 from infra.types import PageMsg, PageResult
-from page_parser import FishyParser, parser_worker
-from parserfuncs import parse_peche
+from scraper.fetcher import RequestsFetcher, fetcher_worker
+from scraper.page_parser import FishyParser, parser_worker
+from scraper.parserfuncs import parse_peche
 
 
 def start_fetcher_and_parser(

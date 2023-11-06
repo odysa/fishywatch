@@ -53,5 +53,5 @@ async def parser_worker(
 
             msg = PageResult(data=data, urls=urls)
             await data_tx.send(msg)
-        except ParseFuncNotFound as e:
+        except Exception as e:
             logging.error(str(e))

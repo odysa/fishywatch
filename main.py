@@ -1,7 +1,7 @@
 import asyncio as tokio
 
 from infra.channel import channel
-from infra.types import PageResult
+from infra.types import ParsedResult
 from scraper.fetcher import RequestsFetcher, fetcher_worker
 from scraper.page_parser import FishyParser, parser_worker
 from scraper.parserfuncs import parse_peche
@@ -46,7 +46,7 @@ async def main():
             await url_tx.send(url)
 
         while parsed_res := await parsed_res_rx.recv():
-            res: PageResult = parsed_res
+            res: ParsedResult = parsed_res
             for url in res.get("urls"):
                 if url not in visited:
                     await url_tx.send(url)

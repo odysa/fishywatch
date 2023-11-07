@@ -3,9 +3,10 @@ from typing import Callable, TypeAlias, TypedDict
 from bs4 import BeautifulSoup
 
 
-class PageMsg(TypedDict):
+class WebPage(TypedDict):
     soup: BeautifulSoup
     domain: str
+    url: str
 
 
 class ParsedData(TypedDict):
@@ -15,9 +16,14 @@ class ParsedData(TypedDict):
     description: str
 
 
-class PageResult(TypedDict):
+class ItemData(TypedDict):
+    parsed_data: ParsedData
+    url: str
+
+
+class ParsedResult(TypedDict):
+    data: ItemData
     urls: list[str]
-    data: ParsedData
 
 
 ParseFunc: TypeAlias = Callable[[BeautifulSoup], ParsedData]

@@ -2,17 +2,18 @@ import logging
 from abc import ABC, abstractmethod
 
 from bs4 import BeautifulSoup
-from utils import filter_urls
 
 from infra.channel import Receiver, Sender
 from infra.exception import ParseFuncNotFound
 from infra.types import PageMsg, PageResult, ParsedData, ParseFunc
 
+from .utils import filter_urls
+
 
 class Parser(ABC):
     @abstractmethod
     def parse(self, page_msg: PageMsg) -> PageResult | None:
-        ...
+        raise NotImplementedError
 
 
 def get_urls(soup: BeautifulSoup) -> list[str]:

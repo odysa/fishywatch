@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from abc import ABC, abstractmethod
 
@@ -12,7 +13,7 @@ from infra.types import PageMsg
 class Fetcher(ABC):
     @abstractmethod
     async def fetch(self, url: str) -> str:
-        ...
+        raise NotImplementedError
 
 
 class RequestsFetcher(Fetcher):
@@ -49,5 +50,6 @@ async def fetcher_worker(
             domain = tldextract.extract(url).domain
             msg = PageMsg(domain=domain, soup=soup)
             await page_tx.send(msg)
+            await asyncio.sleep(0.5)
         except Exception as e:
             logging.error(str(e))

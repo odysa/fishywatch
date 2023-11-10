@@ -37,7 +37,7 @@ class FishyParser(Parser):
 
         func: ParseFunc = self.parser_func_map[domain]
         parsed_data: ExtractedData = func(soup)
-        item_data = ItemData(data=parsed_data, url=page_msg.url, date=datetime.now())
+        item_data = ItemData(extracted=parsed_data, url=page_msg.url, date=datetime.now())
         urls = filter_urls(domain, get_urls(soup))
         return ParsedResult(data=item_data, urls=urls)
 

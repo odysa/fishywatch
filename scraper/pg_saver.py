@@ -1,7 +1,10 @@
-from infra.types import ItemData, ExtractedData
-from infra.exception import Unreachable
-from scraper.saver import Saver
 from asyncpg.connection import Connection as PgConnection
+from tortoise import Tortoise
+
+from infra.exception import Unreachable
+from infra.model import Item
+from infra.types import ItemData
+from scraper.saver import Saver
 
 
 class PostgresSaver(Saver):
@@ -11,15 +14,23 @@ class PostgresSaver(Saver):
         self.conn = conn
 
     async def save(self, item_data: ItemData):
-        data = item_data.data
-        if data is None:
+        if item_data.extracted is None:
             raise Unreachable('data to save impossible to be None')
-        pass
+
+        # insert into items
+        if not self.data_exists(item_data):
+            data = item_data.extracted
+            if data is None:
+                pass
+            item = Item()
+            item.name = data.name
+            item.description = data.description
+            item.url = item_data.url
+            await item.save()
 
     async def close(self):
-        pass
+        await Tortoise.close_connections()
 
-    async def data_exists(self, data: ExtractedData) -> bool:
-        await self.conn.close()
-        self.conn.fetch()
-        return True
+    @staticmethod
+    async def data_exists(item_data: ItemData) -> bool:
+        return await Item.exists(name=item_data.extracted.name, url=item_data.url)

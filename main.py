@@ -47,13 +47,13 @@ async def main():
 
         while parsed_res := await parsed_res_rx.recv():
             res: ParsedResult = parsed_res
-            for url in res.get("urls"):
+            for url in res.urls:
                 if url not in visited:
                     await url_tx.send(url)
                     visited.add(url)
 
-            if res["data"]:
-                await parsed_data_tx.send(res["data"])
+            if res.data and res.data.extracted:
+                await parsed_data_tx.send(res.data)
 
 
 if __name__ == "__main__":

@@ -14,6 +14,10 @@ def parse_peche(soup: BeautifulSoup) -> ExtractedData | None:
     currency = None if not currency_tag else currency_tag.attrs.get("content")
 
     description_tag = soup.find("div", {"class": "product_desc", "itemprop": "description"})
+
+    if description_tag is None:
+        description_tag = soup.find("div", {"class": "product-description"})
+
     description = None if not description_tag else description_tag.find("p").text
 
     if not price:

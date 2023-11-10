@@ -1,8 +1,8 @@
+from dataclasses import dataclass
 from datetime import datetime
-from typing import Callable, TypeAlias, TypedDict
+from typing import Callable, TypeAlias
 
 from bs4 import BeautifulSoup
-from dataclasses import dataclass
 
 
 @dataclass
@@ -22,9 +22,17 @@ class ExtractedData:
 
 @dataclass
 class ItemData:
-    data: ExtractedData
+    extracted: ExtractedData
     url: str
     date: datetime
+
+    @staticmethod
+    def keys():
+        return ['name', 'currency', 'price', 'date', 'url', 'date']
+
+    def values(self):
+        return [self.extracted.name, self.extracted.currency, self.extracted.price, self.extracted.description,
+                self.url, self.date]
 
 
 @dataclass

@@ -6,13 +6,26 @@ class Item(Model):
     id = fields.IntField(pk=True)
     name = fields.TextField()
     description = fields.TextField()
+    url = fields.TextField()
     updated_at = fields.DatetimeField(auto_now=True)
 
 
 class PriceHistory(Model):
     id = fields.IntField(pk=True)
-    item = fields.ForeignKeyField("models.Item", related_name="item")
+    item = fields.ForeignKeyField("model.Item", related_name="item")
     price = fields.FloatField()
     currency = fields.TextField()
     date = fields.DatetimeField()
     updated_at = fields.DatetimeField(auto_now=True)
+
+
+class EmailNotification(Model):
+    id = fields.IntField(pk=True)
+    item = fields.ForeignKeyField("model.Item", related_name="item")
+    email = fields.TextField()
+
+
+class ClickCount(Model):
+    id = fields.IntField(pk=True)
+    item = fields.ForeignKeyField("model.Item", related_name="item")
+    click_count = fields.IntField(default=0)

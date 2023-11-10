@@ -1,29 +1,36 @@
+from datetime import datetime
 from typing import Callable, TypeAlias, TypedDict
 
 from bs4 import BeautifulSoup
+from dataclasses import dataclass
 
 
-class WebPage(TypedDict):
+@dataclass
+class WebPage:
     soup: BeautifulSoup
     domain: str
     url: str
 
 
-class ParsedData(TypedDict):
+@dataclass
+class ExtractedData:
     price: float
     currency: str
     name: str
     description: str
 
 
-class ItemData(TypedDict):
-    parsed_data: ParsedData
+@dataclass
+class ItemData:
+    data: ExtractedData
     url: str
+    date: datetime
 
 
-class ParsedResult(TypedDict):
+@dataclass
+class ParsedResult:
     data: ItemData
     urls: list[str]
 
 
-ParseFunc: TypeAlias = Callable[[BeautifulSoup], ParsedData]
+ParseFunc: TypeAlias = Callable[[BeautifulSoup], ExtractedData]

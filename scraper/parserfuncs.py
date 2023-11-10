@@ -1,9 +1,9 @@
 from bs4 import BeautifulSoup
 
-from infra.types import ParsedData
+from infra.types import ExtractedData
 
 
-def parse_peche(soup: BeautifulSoup) -> ParsedData | None:
+def parse_peche(soup: BeautifulSoup) -> ExtractedData | None:
     name_tag = soup.find("h1", {"class": "product_name", "itemprop": "name"})
     name = None if not name_tag else name_tag.text
 
@@ -19,7 +19,7 @@ def parse_peche(soup: BeautifulSoup) -> ParsedData | None:
     if not price:
         return None
 
-    return ParsedData(
+    return ExtractedData(
         price=float(price),
         currency=currency,
         name=name,

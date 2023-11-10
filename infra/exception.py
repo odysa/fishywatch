@@ -1,2 +1,6 @@
 class ParseFuncNotFound(Exception):
     ...
+
+
+class Unreachable(Exception):
+    ...

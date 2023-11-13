@@ -10,6 +10,10 @@ from scraper.parserfuncs import parse_peche
 from scraper.saver import CSVSaver, saver_worker
 from scraper.config import Config, init_db
 
+PARSER_FUNCS = {
+    "pechextreme": parse_peche
+}
+
 
 async def main():
     load_dotenv()
@@ -39,7 +43,7 @@ async def main():
         for _ in range(config.parser_count):
             tg.create_task(
                 parser_worker(
-                    FishyParser({"pechextreme": parse_peche}),
+                    FishyParser(PARSER_FUNCS),
                     page_rx,
                     parsed_res_tx
                 )

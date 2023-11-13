@@ -1,6 +1,8 @@
 import time
 from datetime import timedelta
 
+import pytest
+
 from infra.expire_set import ExpireSet
 
 
@@ -22,3 +24,15 @@ def test_expire_set_expire_time():
     assert 2 not in s
     assert 3 not in s
     assert len(s) == 0
+
+
+@pytest.mark.parametrize("n", [100, 1000, 10000, 100000, 1000000])
+def test_expire_set_not_expired(n):
+    s = ExpireSet[int](limit=n + 1, expire_time=timedelta(days=100))
+    for i in range(n):
+        s.add(i)
+
+    assert len(s) == n
+
+    for i in range(n):
+        assert i in s

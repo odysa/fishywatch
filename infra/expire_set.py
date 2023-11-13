@@ -23,7 +23,7 @@ class ExpireSet(Generic[_T]):
 
     def add(self, item: _T):
         set_item: SetItem[_T] = SetItem(item=item, timestamp=datetime.now())
-        self.item_dict = {item: set_item}
+        self.item_dict[item] = set_item
 
         if len(self.item_dict) > self.limit:
             self.evict_expire()

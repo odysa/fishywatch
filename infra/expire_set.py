@@ -47,5 +47,5 @@ class ExpireSet(Generic[_T]):
     def __len__(self):
         return len(self.item_dict)
 
-    def values(self) -> Generator[_T]:
-        return (v.item for v in self.item_dict.values())
+    def values(self) -> list[_T]:
+        return [v.item for v in self.item_dict.values()]

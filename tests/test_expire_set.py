@@ -7,8 +7,9 @@ from infra.expire_set import ExpireSet
 
 
 def test_expire_set_limit():
-    s = ExpireSet[int](limit=1, expire_time=timedelta(minutes=1))
+    s = ExpireSet[int](limit=1, expire_time=timedelta(seconds=0.5))
     s.add(1)
+    time.sleep(0.5)
     s.add(2)
     assert 1 not in s
 
@@ -36,3 +37,17 @@ def test_expire_set_not_expired(n):
 
     for i in range(n):
         assert i in s
+
+
+@pytest.mark.parametrize("n", [100, 1000, 10000, 100000, 1000000])
+def test_expire_set_values(n):
+    s = ExpireSet[int](limit=n + 1, expire_time=timedelta(days=100))
+    for i in range(n):
+        s.add(i)
+
+    assert len(s) == n
+
+    values = set(s.values())
+    assert len(values) == n
+    for i in range(n):
+        assert i in values

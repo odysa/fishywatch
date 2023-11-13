@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Dict, Generator, Generic, TypeVar
+from typing import Dict, Generic, TypeVar
 
 _T = TypeVar("_T")
 

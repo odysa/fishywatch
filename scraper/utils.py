@@ -28,3 +28,11 @@ def filter_urls(domain: str, urls: list[str]) -> list[str]:
             clean_urls.append(clean_u)
 
     return clean_urls
+
+
+def to_int(val: str | None, default: int) -> int:
+    try:
+        v = int(val)
+    except Exception:
+        return default
+    return v

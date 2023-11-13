@@ -1,7 +1,10 @@
 import asyncio as tokio
 
+from dotenv import load_dotenv
+
 from infra.channel import channel
 from infra.types import ParsedResult
+from scraper import init_db
 from scraper.fetcher import RequestsFetcher, fetcher_worker
 from scraper.page_parser import FishyParser, parser_worker
 from scraper.parserfuncs import parse_peche
@@ -9,6 +12,8 @@ from scraper.saver import CSVSaver, saver_worker
 
 
 async def main():
+    load_dotenv()
+    await init_db()
     visited = set()
     urls = ["https://www.pechextreme.com/en"]
 

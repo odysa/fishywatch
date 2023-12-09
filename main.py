@@ -4,11 +4,11 @@ from dotenv import load_dotenv
 
 from infra.channel import channel
 from infra.types import ParsedResult
+from scraper.config import Config, init_db
 from scraper.fetcher import RequestsFetcher, fetcher_worker
 from scraper.page_parser import FishyParser, parser_worker
 from scraper.parserfuncs import parse_peche
 from scraper.saver import CSVSaver, saver_worker
-from scraper.config import Config, init_db
 
 PARSER_FUNCS = {
     "pechextreme": parse_peche

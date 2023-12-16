@@ -18,6 +18,7 @@ class ExtractedData:
     currency: str
     name: str
     description: str
+    version: str
 
 
 @dataclass
@@ -28,11 +29,17 @@ class ItemData:
 
     @staticmethod
     def keys():
-        return ['name', 'currency', 'price', 'date', 'url', 'date']
+        return ["name", "currency", "price", "date", "url", "date"]
 
     def values(self):
-        return [self.extracted.name, self.extracted.currency, self.extracted.price, self.extracted.description,
-                self.url, self.date]
+        return [
+            self.extracted.name,
+            self.extracted.currency,
+            self.extracted.price,
+            self.extracted.description,
+            self.url,
+            self.date,
+        ]
 
 
 @dataclass

@@ -1,3 +1,5 @@
+# Test data
+*.csv
 # Poetry
 poetry.lock
 
